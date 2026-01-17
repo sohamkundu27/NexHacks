@@ -10,13 +10,19 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@arizeai/openinference-instrumentation-openai": "^4.0.5",
     "@livekit/components-react": "^2.9.19",
     "@livekit/components-styles": "^1.2.0",
+    "@opentelemetry/exporter-trace-otlp-proto": "^0.210.0",
+    "@opentelemetry/instrumentation": "^0.210.0",
+    "@opentelemetry/resources": "^2.4.0",
+    "@opentelemetry/sdk-trace-node": "^2.4.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "livekit-client": "^2.17.0",
     "livekit-server-sdk": "^2.15.0",
+    "openai": "^6.16.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
