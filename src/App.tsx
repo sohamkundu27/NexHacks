@@ -55,7 +55,7 @@ function App() {
          VideoConference handles the layout automatically.
          It will show a grid of participants.
       */}
-      <VideoConference />
+      <VideoConference layout="grid" />
 
       {/* Essential for audio playback */}
       <RoomAudioRenderer />

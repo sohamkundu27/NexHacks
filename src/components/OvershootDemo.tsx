@@ -22,44 +22,11 @@ export function OvershootDemo() {
     visionRef.current = new RealtimeVision({
       apiUrl: 'https://cluster1.overshoot.ai/api/v0.2',
       apiKey: key,
-      prompt: `Role: You are an expert Medical Behavioral Analyst observing a telehealth patient. Your goal is to detect non-verbal signals indicating a lack of understanding or distress.
-
-Input: A continuous stream of video frames from the patient's webcam.
-
-Task: Analyze the patient's facial micro-expressions and body language every 2 seconds. Classify their state into one of the following four categories. You must be highly sensitive to "Confusion."
-
-Classification Categories:
-
-CONFUSED: (High Priority)
-
-Visual Cues: Furrowed brow, squinting eyes, head tilted to the side, freezing mid-motion, or mouth slightly open.
-
-Implication: The patient does not understand the medical jargon just used.
-
-DISENGAGED:
-
-Visual Cues: Eyes wandering off-screen, looking down at a phone, blank stare (flat affect), or fidgeting excessively.
-
-Implication: The patient is overwhelmed or has stopped listening.
-
-ENGAGED:
-
-Visual Cues: Nodding, maintaining eye contact, smiling, verbal backchanneling cues (mouth moving in agreement).
-
-Implication: Communication is successful.
-
-Output Constraint: Return ONLY a JSON object. Do not output markdown or conversational text.
-
-JSON Schema:
-
-JSON
-
-{
-  "status": "CONFUSED" | "DISENGAGED" | "ENGAGED",
-  "confidence": 0.0-1.0,
-  "trigger_action": true | false
+      prompt: `Role: You are an expert Communication Analyst observing a patient during a telehealth call. Your sole purpose is to detect if the patient understands the doctor's explanation. Objective: Real-time classification of the patient's level of comprehension. You must accurately distinguish between "Thinking/Processing" (Good) and "Confusion" (Bad).Input Context: Video stream of a patient.Analysis Logic:Differentiate:Processing Information: Eyes looking up/away, stillness, neutral mouth. $\rightarrow$ DO NOT INTERRUPT.Confusion: Eyebrows knitted together, head tilt, lips pursed, stopped blinking. $\rightarrow$ INTERRUPT. Classification Labels:CONFUSION: Slight uncertainty, squinting, slower nodding.UNDERSTANDING: Nodding, verbal backchanneling cues (smiling/agreement), attentive.Negative Constraints (Critical):Do NOT classify "nodding" as confusion.Do NOT classify "thinking/looking away to recall" as Disengaged.Do NOT classify "adjusting glasses" or "screen glare squint" as confusion.Output Format:Return ONLY a single valid JSON object. No conversational text.JSON{
+  "visual_evidence": "Brief description of the facial cue (e.g., 'Brow knitted + Head tilt')",
+  "current_state": "CONFUSION" | "UNDERSTANDING",
 }
-Set trigger_action to true ONLY if status is CONFUSED and confidence is > 0.8.'`,
+Logic for should_interrupt: Set to TRUE only if (current_state is CONFUSION_HIGH) AND intensity_score > 5.'`,
       source: { type: 'camera', cameraFacing: 'user' },
       onResult: (data: any) => {
         setDebugInfo(`Data rx: ${new Date().toLocaleTimeString()}`);

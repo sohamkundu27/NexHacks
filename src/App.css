@@ -1,6 +1,6 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
+  width: 100%;
+  height: 100%;
   padding: 0;
   text-align: center;
 }
@@ -48,6 +48,9 @@
   max-width: none !important;
   max-height: none !important;
   background: #000 !important;
+  position:absolute;
+  top:0;
+  left:0;
 }
 
 .lk-focus-layout-wrapper,
