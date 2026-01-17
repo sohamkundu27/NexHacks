@@ -5,6 +5,20 @@
   text-align: center;
 }
 
+/* Pre-call: PDF upload and loading steps */
+.app-step {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #111;
+  color: #fff;
+}
+.app-loading {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;

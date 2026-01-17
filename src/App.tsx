@@ -1,40 +1,51 @@
 import { LiveKitRoom, VideoConference, RoomAudioRenderer } from '@livekit/components-react';
 import { useEffect, useState } from 'react';
+import { PdfUpload } from './components/PdfUpload';
+import { CallWithSTT } from './components/CallWithSTT';
 import { OvershootDemo } from './components/OvershootDemo';
 import '@livekit/components-styles';
 import './App.css';
 
+/**
+ * Flow: 1) Upload medical PDF → 2) Start call (LiveKit) → 3) STT detects prescriptions
+ * → 4) Conflict check (Browserbase or RxNav) with on-screen indicator.
+ */
 function App() {
-  const [token, setToken] = useState("");
+  const [pdfReady, setPdfReady] = useState(false);
+  const [token, setToken] = useState('');
 
+  // Fetch LiveKit token only after user has uploaded PDF and clicked "Start call"
   useEffect(() => {
+    if (!pdfReady) return;
     (async () => {
       try {
-        // Fetch from the same origin (the backend serving this file)
-        const response = await fetch("/getToken");
-        const token = await response.text();
-        setToken(token);
+        const res = await fetch('/getToken');
+        setToken(await res.text());
       } catch (e) {
-        console.error("Failed to generate token", e);
+        console.error('Failed to generate token', e);
       }
     })();
-  }, []);
+  }, [pdfReady]);
 
-  if (!token) {
+  // Step 1: PDF upload
+  if (!pdfReady) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh', 
-        color: 'white',
-        background: '#111' 
-      }}>
-        Loading secure connection...
+      <div className="app-step app-upload">
+        <PdfUpload onReady={() => setPdfReady(true)} />
       </div>
     );
   }
 
+  // Step 2: Waiting for token
+  if (!token) {
+    return (
+      <div className="app-step app-loading">
+        Loading secure connection…
+      </div>
+    );
+  }
+
+  // Step 3–4: LiveKit call with STT + conflict check
   return (
     <LiveKitRoom
       serverUrl={import.meta.env.VITE_PUBLIC_LIVEKIT_URL}
@@ -44,27 +55,14 @@ function App() {
       audio={true}
       data-lk-theme="default"
       style={{ height: '100vh', width: '100vw', background: '#000' }}
-      onDisconnected={() => {
-        console.log("Disconnected from room");
-        // Optional: Auto-reconnect logic or reload could go here
-      }}
+      onDisconnected={() => console.log('Disconnected from room')}
     >
+      <CallWithSTT />
       <OvershootDemo />
-      
-      {/* 
-         VideoConference handles the layout automatically.
-         It will show a grid of participants.
-      */}
+      {/* VideoConference handles the layout; grid shows participants. */}
       <VideoConference layout="grid" />
-
       {/* Essential for audio playback */}
       <RoomAudioRenderer />
-      
-      {/* 
-        Standard control bar for mute/unmute/leave.
-        We place it fixed at the bottom if VideoConference doesn't include it automatically 
-        (VideoConference usually includes controls, but being explicit helps if customized)
-       */}
     </LiveKitRoom>
   );
 }

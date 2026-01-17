@@ -1,0 +1,12 @@
+FLOW:
+
+1. user uplaods PDF of medical DATA
+2. PDF parser to extract text, store in temporary storgae
+3. when STT (speech to text) detects that doctor prescribes a drug, initiate browserbase 
+to check for potential conflicts (show visual indicator that this is happening)
+
+Use livekit for speech to text: https://cloud.livekit.io/projects/p_4cqu6b1dae7/overview
+
+https://docs.livekit.io/agents/start/voice-ai-quickstart/
+https://docs.livekit.io/agents/models/stt/
+

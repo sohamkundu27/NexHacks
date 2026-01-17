@@ -6,7 +6,11 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/getToken': 'http://localhost:3000',
+      '/getToken': 'http://localhost:3001',
+      '/upload-pdf': 'http://localhost:3001',
+      '/check-interactions': 'http://localhost:3001',
+      '/api': 'http://localhost:3001',
+      '/health': 'http://localhost:3001',
     },
   },
 })
