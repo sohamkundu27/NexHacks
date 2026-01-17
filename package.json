@@ -17,6 +17,7 @@
     "@opentelemetry/instrumentation": "^0.210.0",
     "@opentelemetry/resources": "^2.4.0",
     "@opentelemetry/sdk-trace-node": "^2.4.0",
+    "@overshoot/sdk": "^0.1.0-alpha.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
