@@ -24,7 +24,7 @@ function App() {
 
   return (
     <LiveKitRoom
-      serverUrl="wss://nexhacks-v62obwlz.livekit.cloud"
+      serverUrl={import.meta.env.VITE_PUBLIC_LIVEKIT_URL}
       token={token}
       connect={true}
       data-lk-theme="default"
