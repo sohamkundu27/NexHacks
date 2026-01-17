@@ -1,5 +1,7 @@
-import { LiveKitRoom, VideoConference } from '@livekit/components-react';
+import { LiveKitRoom, VideoConference, RoomAudioRenderer } from '@livekit/components-react';
 import { useEffect, useState } from 'react';
+import { OvershootDemo } from './components/OvershootDemo';
+import '@livekit/components-styles';
 import './App.css';
 
 function App() {
@@ -19,7 +21,18 @@ function App() {
   }, []);
 
   if (!token) {
-    return <div>Loading...</div>;
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh', 
+        color: 'white',
+        background: '#111' 
+      }}>
+        Loading secure connection...
+      </div>
+    );
   }
 
   return (
@@ -27,11 +40,31 @@ function App() {
       serverUrl={import.meta.env.VITE_PUBLIC_LIVEKIT_URL}
       token={token}
       connect={true}
+      video={true}
+      audio={true}
       data-lk-theme="default"
-      style={{ height: '100vh' }}
+      style={{ height: '100vh', width: '100vw', background: '#000' }}
+      onDisconnected={() => {
+        console.log("Disconnected from room");
+        // Optional: Auto-reconnect logic or reload could go here
+      }}
     >
-      {/* This component renders the entire video grid for you */}
+      <OvershootDemo />
+      
+      {/* 
+         VideoConference handles the layout automatically.
+         It will show a grid of participants.
+      */}
       <VideoConference />
+
+      {/* Essential for audio playback */}
+      <RoomAudioRenderer />
+      
+      {/* 
+        Standard control bar for mute/unmute/leave.
+        We place it fixed at the bottom if VideoConference doesn't include it automatically 
+        (VideoConference usually includes controls, but being explicit helps if customized)
+       */}
     </LiveKitRoom>
   );
 }

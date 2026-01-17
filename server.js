@@ -11,7 +11,7 @@ const createToken = async () => {
 
   const at = new AccessToken(process.env.LIVEKIT_API_KEY, process.env.LIVEKIT_API_SECRET, {
     identity: participantName,
-    ttl: '10m',
+    ttl: '24h',
   });
   at.addGrant({ roomJoin: true, room: roomName });
 
